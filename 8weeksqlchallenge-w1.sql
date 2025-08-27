@@ -122,17 +122,28 @@ INNER JOIN menu
 GROUP BY sa.customer_id
 ORDER BY sa.customer_id
 
--- Question 10
-SELECT sa.customer_id, SUM(menu.price * 10 * 2)
-FROM sales sa
-INNER JOIN members mem
-	ON sa.customer_id = mem.customer_id
-	AND sa.order_date >= mem.join_date
-    AND sa.order_date <= '2021-01-31'
- INNER JOIN menu
- 	ON menu.product_id = sa.product_id
- GROUP BY sa.customer_id
-ORDER BY sa.customer_id
+-- Question 10 - DONE
+SELECT wow.customer_id, 
+SUM(
+	CASE
+		WHEN wow.order_date BETWEEN wow.join_date AND DATE_TRUNC('day', wow.join_date) + INTERVAL '6 days' THEN menu.price * 20
+		WHEN wow.product_id = 1 THEN menu.price * 20
+		ELSE menu.price * 10
+	END
+) AS points
+FROM
+(
+	SELECT sa.customer_id, sa.product_id, sa.order_date, mem.join_date
+	FROM sales sa
+	INNER JOIN members mem
+		ON sa.customer_id = mem.customer_id
+		AND mem.join_date <= sa.order_date
+) as wow
+INNER JOIN menu
+	ON wow.product_id = menu.product_id
+WHERE wow.order_date <= '2021-01-31'
+GROUP BY wow.customer_id
+ORDER BY wow.customer_id
 
 -- Bonus 1 - DONE
 SELECT sa.customer_id, sa.order_date, menu.product_name, menu.price as price, 
@@ -147,16 +158,38 @@ LEFT JOIN members mem
 	ON mem.customer_id = sa.customer_id
 ORDER BY sa.customer_id, sa.order_date, menu.product_name
 
--- Bonus 2:
-SELECT sa.customer_id, sa.order_date, menu.product_name, menu.price as price,
-CASE
-	WHEN mem.join_date <=
-FROM sales sa
-LEFT JOIN menu
-	sa.product_id = menu.product_id
-LEFT JOIN members mem
-	mem.customer_id = sa.customer_id
-ORDER BY
+--  Bonus 2: Hiển thị danh sách đồ ăn khách hàng đặt được xếp hạng theo 
+-- ngày đặt món từ lúc họ trở thành thành viên thân thiết nếu không phải thì xếp hạng null 
+SELECT 
+  hehe.customer_id, 
+  hehe.order_date, 
+  hehe.product_name, 
+  hehe.price, 
+  hehe.member, 
+  CASE WHEN hehe.member = 'Y' THEN DENSE_RANK() OVER (
+    PARTITION BY hehe.customer_id 
+    ORDER BY 
+      CASE WHEN hehe.member = 'Y' THEN hehe.order_date ELSE NULL END
+  ) ELSE NULL END AS ranking 
+FROM 
+  (
+    SELECT 
+      sa.customer_id, 
+      sa.order_date, 
+      sa.product_id, 
+      menu.product_name, 
+      menu.price, 
+      (
+        CASE WHEN sa.order_date >= mem.join_date THEN 'Y' ELSE 'N' END
+      ) AS member 
+    FROM 
+      sales sa 
+      LEFT JOIN members mem ON sa.customer_id = mem.customer_id 
+      LEFT JOIN menu ON sa.product_id = menu.product_id
+  ) as hehe 
+ORDER BY 
+  hehe.customer_id, 
+  hehe.order_date;
 
 
 
