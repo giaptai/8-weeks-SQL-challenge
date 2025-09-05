@@ -59,25 +59,25 @@
 ### Tóm tắt kiến thức SQL đã áp dụng
 Dưới đây là các nhóm kiến thức SQL mà tôi đã vận dụng trong các câu truy vấn:
 
-## 1. **CTE (Common Table Expression - WITH)**
+### 1. **CTE (Common Table Expression - WITH)**
 - Dùng `WITH ... AS (...)` để chia nhỏ truy vấn thành nhiều bước, dễ đọc và tái sử dụng.
 - Ví dụ: `WITH hehe AS (...) SELECT * FROM hehe;`
 
 ---
 
-## 2. **Aggregate Functions**
+### 2. **Aggregate Functions**
 - `COUNT(*)`, `COUNT(DISTINCT ...)`, `AVG()`, `ROUND()`, `MIN()`, `MAX()`.
 - Tính toán tổng số khách hàng, tỉ lệ %, trung bình số ngày, v.v.
 
 ---
 
-## 3. **GROUP BY & HAVING**
+### 3. **GROUP BY & HAVING**
 - `GROUP BY` để gom nhóm theo tháng, theo khách hàng, theo gói cước.
 - `HAVING` để lọc nhóm (ví dụ: khách hàng có **COUNT(*) = 2**).
 
 ---
 
-## 4. **Date/Time Functions**
+### 4. **Date/Time Functions**
 - `EXTRACT(YEAR FROM start_date)`, `EXTRACT(MONTH FROM start_date)` để lấy năm, tháng.
 - `DATE_TRUNC('MONTH', start_date)` để cắt về đầu tháng.
 - `generate_series(start_date, end_date, interval '1 month')` để sinh chuỗi ngày/tháng.
@@ -85,7 +85,7 @@ Dưới đây là các nhóm kiến thức SQL mà tôi đã vận dụng trong 
 
 ---
 
-## 5. **Window Functions**
+### 5. **Window Functions**
 - `LAG()` để lấy giá trị ở bản ghi trước (theo khách hàng).
 - `LEAD()` để lấy giá trị ở bản ghi sau.
 - `ROW_NUMBER() OVER (PARTITION BY ... ORDER BY ...)` để đánh số thứ tự.
@@ -93,51 +93,51 @@ Dưới đây là các nhóm kiến thức SQL mà tôi đã vận dụng trong 
 
 ---
 
-## 6. **Subquery & Derived Table**
+### 6. **Subquery & Derived Table**
 - Subquery trong `FROM (...) AS alias`.
 - Subquery trong `JOIN (...) AS alias`.
 - Subquery để tính `total_customer`, `total_count`.
 
 ---
 
-## 7. **JOINs**
+### 7. **JOINs**
 - `JOIN` để nối bảng `plans` và `subscriptions`.
 - `LEFT JOIN` với bảng `churn_dates` để xử lý khách hàng rời bỏ.
 - `JOIN ... ON TRUE` để nối chéo khi cần.
 
 ---
 
-## 8. **CASE WHEN**
+### 8. **CASE WHEN**
 - Dùng `CASE` để phân loại bucket ngày (`0-30`, `31-60`, …).
 - Tính toán số tiền upgrade/annual dựa trên `plan_id`.
 
 ---
 
-## 9. **DISTINCT & DISTINCT ON**
+### 9. **DISTINCT & DISTINCT ON**
 - `DISTINCT` để loại bỏ trùng khách hàng.
 - `DISTINCT ON (customer_id)` để lấy bản ghi **mới nhất** theo khách hàng.
 
 ---
 
-## 10. **Union & Data Combination**
+### 10. **Union & Data Combination**
 - `UNION ALL` để gộp dữ liệu từ nhiều nguồn thanh toán (monthly, upgrade, annual).
 
 ---
 
-## 11. **Percentage & Ratio Calculation**
+### 11. **Percentage & Ratio Calculation**
 - Tính % khách hàng chọn 1 plan so với tổng (`COUNT / total * 100`).
 - Dùng `ROUND(..., 1)` hoặc `ROUND(..., 2)` để định dạng kết quả.
 
 ---
 
-## 12. **Churn, Upgrade, Downgrade Logic**
+### 12. **Churn, Upgrade, Downgrade Logic**
 - **Downgrade**: khách chuyển từ gói cao xuống gói thấp (VD: từ 2 xuống 1).
 - **Upgrade**: khách nâng cấp gói trong cùng tháng.
 - **Churn**: khách rời bỏ tại gói cuối (`plan_id = 4`).
 
 ---
 
-# ✅ Kết luận
+### ✅ Kết luận
 Các truy vấn đã bao quát nhiều kiến thức SQL quan trọng:
 - **CTE**
 - **Aggregate + Grouping**
